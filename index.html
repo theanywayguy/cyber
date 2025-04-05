@@ -3,898 +3,1098 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cybersecurity Quiz</title>
+    <title>Yazılım Muhendisligi Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        background-color: #f4f4f4;
-      }
-      .container {
-        max-width: 800px;
-        margin: auto;
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-      h1 {
-        text-align: center;
-        color: #333;
-      }
-      .question {
-        margin-bottom: 20px;
-      }
-      .options label {
-        display: block;
-        margin: 5px 0;
-      }
-      button {
-        display: block;
-        width: 100%;
-        padding: 10px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      button:hover {
-        background-color: #0056b3;
-      }
-      #results {
-        margin-top: 20px;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-      }
-      th,
-      td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      th {
-        background-color: #007bff;
-        color: white;
-      }
       .correct {
-        color: green;
+        color: #10b981;
       }
       .incorrect {
-        color: red;
+        color: #ef4444;
+      }
+      .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        z-index: 50;
+      }
+      .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 40;
       }
     </style>
   </head>
-  <body>
-    <div class="container">
-      <h1>Cybersecurity Quiz</h1>
-      <div id="quiz"></div>
-      <button onclick="submitQuiz()">Submit Quiz</button>
-      <div id="results"></div>
+  <body class="bg-gray-100 font-sans">
+    <div class="max-w-4xl mx-auto p-6">
+      <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">
+        Yazilim Muhendisligi Quiz
+      </h1>
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <div class="flex justify-center mb-4">
+          <label for="modelSelect" class="mr-2 text-lg text-gray-700"
+            >Select Quiz Model:</label
+          >
+          <select id="modelSelect" class="p-2 border rounded-lg">
+            <option value="model1">PDF 1</option>
+            <option value="model2">PDF 2</option>
+            <option value="model3">PDF 3</option>
+            <option value="model4">PDF 4</option>
+            <option value="model5">PDF 5</option>
+            <option value="model6">PDF 6</option>
+            <option value="model7">LEAKED</option>
+          </select>
+        </div>
+        <div id="score" class="text-lg text-gray-700 mb-4">Score: 0/50</div>
+        <div id="questionArea" class="mb-6"></div>
+        <div id="explanation" class="p-4 border rounded-lg hidden"></div>
+        <div class="flex justify-center space-x-4 mt-4">
+          <button
+            id="submitBtn"
+            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            Submit Answer
+          </button>
+          <button
+            id="resetBtn"
+            class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition"
+          >
+            Reset Quiz
+          </button>
+          <button
+            id="randomBtn"
+            class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
+          >
+            Randomize Questions
+          </button>
+        </div>
+        <table class="w-full mt-6 border-collapse">
+          <thead>
+            <tr class="bg-green-600 text-white">
+              <th class="border p-2">Question #</th>
+              <th class="border p-2">Status</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody" class="text-gray-700"></tbody>
+        </table>
+      </div>
+    </div>
+    <div id="overlay" class="overlay"></div>
+    <div id="popup" class="popup">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">Quiz Completed!</h2>
+      <p id="popupScore" class="text-lg mb-4"></p>
+      <button
+        id="retryWrongBtn"
+        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+      >
+        Retry Wrong Questions
+      </button>
+      <button
+        id="closePopupBtn"
+        class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition ml-2"
+      >
+        Close
+      </button>
     </div>
 
     <script>
-      const questions = [
+      const questionsModel1 = [
         {
-          q: "Which of the following is an example of a breach of confidentiality?",
-          o: [
+          question:
+            "Which of the following is an example of a breach of confidentiality?",
+          options: [
             "An employee leaks internal data to an unauthorised person",
             "An attacker changes the data in the system",
             "Inability of a system to provide service to its users",
             "An employee accidentally downloads malware via e-mail",
             "A firewall monitors and filters network traffic",
           ],
-          a: 0,
+          correct: 0,
         },
         {
-          q: "Which of the following is the most commonly used method to recognise that Integrity has been compromised?",
-          o: [
+          question:
+            "Which of the following is the most commonly used method to recognise that Integrity has been compromised?",
+          options: [
             "VPN usage",
             "Hashing algorithms",
             "Encryption algorithms",
             "Antivirus software",
             "IDS/IPS systems",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "Which of the following is not one of the types of insider threat?",
-          o: [
+          question:
+            "Which of the following is not one of the types of insider threat?",
+          options: [
             "Negligent Insider Threat",
             "Malicious Insider Threat",
             "Mole",
             "Firewall attacker (Firewall Attacker)",
             "Turncloak",
           ],
-          a: 3,
+          correct: 3,
         },
         {
-          q: "Which of the following is a correct statement about advanced persistent threats (APT)?",
-          o: [
+          question:
+            "Which of the following is a correct statement about advanced persistent threats (APT)?",
+          options: [
             "APT attacks are usually detected in a short time.",
             "APT attacks aim to cause random and sudden damage.",
             "APT attacks can remain undetected for a long time.",
             "APT attacks are usually carried out by individual hackers.",
             "APT attacks are only carried out by large states.",
           ],
-          a: 2,
+          correct: 2,
         },
         {
-          q: "Which of the following is a correct statement about the Cyber Kill Chain model?",
-          o: [
+          question:
+            "Which of the following is a correct statement about the Cyber Kill Chain model?",
+          options: [
             "It covers only authentication processes.",
             "It is an approach to understanding all stages of an attack.",
             "It is not used to analyse advanced persistent threats (APT).",
             "It can only be implemented by network security devices.",
             "It is an ineffective model against external threats.",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "Which of the following is one of the differences between Antivirus and Anti-Malware software?",
-          o: [
+          question:
+            "Which of the following is one of the differences between Antivirus and Anti-Malware software?",
+          options: [
             "Antivirus only protects against computer viruses, but Anti-Malware is more comprehensive.",
             "Anti-Malware software cannot detect malware.",
             "Antivirus programmes are more advanced than Anti-Malware software.",
             "Anti-Malware software only scans e-mails.",
             "Antivirus software is used to prevent hackers.",
           ],
-          a: 0,
+          correct: 0,
         },
         {
-          q: "The AAA security model does not include which of the following?",
-          o: [
+          question:
+            "The AAA security model does not include which of the following?",
+          options: [
             "Authentication",
             "Authorisation",
             "Accounting",
             "Encryption",
             "Access control",
           ],
-          a: 3,
+          correct: 3,
         },
         {
-          q: "Which of the following is not one of the functions of a Firewall?",
-          o: [
+          question:
+            "Which of the following is not one of the functions of a Firewall?",
+          options: [
             "Filtering network traffic",
             "Prevent unauthorised access",
             "Detect malware",
             "Work like an intrusion detection system (IDS)",
             "Analysing incoming and outgoing data",
           ],
-          a: 2,
+          correct: 2,
         },
         {
-          q: "What is a DMZ (Demilitarised Zone)?",
-          o: [
+          question: "What is a DMZ (Demilitarised Zone)?",
+          options: [
             "It is a network structure where firewalls are completely removed.",
             "It is a zone where all requests from the external network are directed to the internal network.",
             "It is a security zone between the internal and external network where certain services are provided.",
             "It is a network area that is not protected against security threats.",
             "A private network used for VPN connections.",
           ],
-          a: 2,
+          correct: 2,
         },
         {
-          q: "What is the main difference between IDS and IPS?",
-          o: [
+          question: "What is the main difference between IDS and IPS?",
+          options: [
             "IDS blocks attacks, IPS only detects them.",
             "IPS prevents attacks, IDS only detects them.",
             "IDS works only against external threats, while IPS focuses on internal threats.",
             "IPS is only used against physical security threats.",
             "IDS provides real-time protection, while IPS operates on a time delay.",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "What is the main task of a Domain Controller?",
-          o: [
+          question: "What is the main task of a Domain Controller?",
+          options: [
             "Authenticate users and manage access permissions",
             "Encrypt all network traffic",
             "To make firewall configurations",
             "Blocking malicious software",
             "Manage backup operations on the network",
           ],
-          a: 0,
+          correct: 0,
         },
         {
-          q: "DNS (Domain Name System) does which of the following?",
-          o: [
+          question: "DNS (Domain Name System) does which of the following?",
+          options: [
             "Translates IP addresses into domain names.",
             "Provides e-mail security.",
             "Detects network attacks.",
             "Performs secure file transfer.",
             "Performs antivirus scans.",
           ],
-          a: 0,
+          correct: 0,
         },
         {
-          q: "Which of the following is not one of the types of vulnerability of a system?",
-          o: [
+          question:
+            "Which of the following is not one of the types of vulnerability of a system?",
+          options: [
             "Technical vulnerability",
             "Human-induced vulnerability",
             "Hardware vulnerability",
             "Software vulnerability",
             "Cryptographic key security",
           ],
-          a: 4,
+          correct: 4,
         },
         {
-          q: "Which type of insider threat is an employee unknowingly infecting a system with malware by clicking on a malicious link?",
-          o: [
+          question:
+            "Which type of insider threat is an employee unknowingly infecting a system with malware by clicking on a malicious link?",
+          options: [
             "Malicious internal threat",
             "Careless internal threat",
             "Mole",
             "APT attack",
             "Social engineering attack",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "What is the main purpose of confidentiality in cyber security?",
-          o: [
+          question:
+            "What is the main purpose of confidentiality in cyber security?",
+          options: [
             "To ensure that data is accessible.",
             "To prevent unauthorised access to data.",
             "To ensure data integrity.",
             "To improve system performance.",
             "Reduce network latency.",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "Which of the following is used to verify data integrity?",
-          o: ["Encryption", "Hashing", "Firewall", "VPN", "Proxy Server"],
-          a: 1,
+          question: "Which of the following is used to verify data integrity?",
+          options: ["Encryption", "Hashing", "Firewall", "VPN", "Proxy Server"],
+          correct: 1,
         },
         {
-          q: "Which type of threat involves complex, long-term attacks, usually sponsored by states?",
-          o: [
+          question:
+            "Which type of threat involves complex, long-term attacks, usually sponsored by states?",
+          options: [
             "Insider Threat",
             "Advanced Persistent Threat (APT)",
             "Phishing",
             "Ransomware",
             "Malicious Software",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "What does the Cyber Kill Chain model help organisations with?",
-          o: [
+          question:
+            "What does the Cyber Kill Chain model help organisations with?",
+          options: [
             "Identifying vulnerabilities.",
             "Understanding and countering cyber attacks.",
             "Encrypting data.",
             "To manage user access.",
             "To improve network performance.",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "Which of the following refers to the concept of ‘Availability’?",
-          o: [
+          question:
+            "Which of the following refers to the concept of ‘Availability’?",
+          options: [
             "Protection of information from unauthorised persons",
             "Ensuring the integrity of information and data",
             "Accessibility of information by relevant persons",
             "Protection of data by encryption",
             "Protection of the system against unauthorised access",
           ],
-          a: 2,
+          correct: 2,
         },
         {
-          q: "For what purpose is ‘non-repudiation’ used?",
-          o: [
+          question: "For what purpose is ‘non-repudiation’ used?",
+          options: [
             "For encryption of data",
             "To ensure data integrity",
             "For proof of data ownership",
             "To prevent unauthorised access to the system",
             "To increase the data access speed",
           ],
-          a: 2,
+          correct: 2,
         },
         {
-          q: "‘Hashing’ is usually used to provide which security policy?",
-          o: [
+          question:
+            "‘Hashing’ is usually used to provide which security policy?",
+          options: [
             "Confidentiality",
             "Integrity",
             "Accessibility",
             "Non repudation",
             "Authorisation",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "Which of the following is not a type of ‘Threat’?",
-          o: [
+          question: "Which of the following is not a type of ‘Threat’?",
+          options: [
             "Malicious software (Malware)",
             "Ransomware",
             "Phishing",
             "Firewall (Firewall)",
             "Insider Threat",
           ],
-          a: 3,
+          correct: 3,
         },
         {
-          q: "What is an ‘Insider Threat’?",
-          o: [
+          question: "What is an ‘Insider Threat’?",
+          options: [
             "External cyber attacks",
             "Security risks arising from within the organisation",
             "Malware attacks",
             "Firewalls blocking network traffic",
             "Phishing attacks",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "What does ‘Advanced Persistent Threat’ (APT) mean?",
-          o: [
+          question: "What does ‘Advanced Persistent Threat’ (APT) mean?",
+          options: [
             "Short-term and sudden cyber attacks",
             "Long-lasting and difficult to detect cyber attacks",
             "Malware attacks",
             "Ransomware attacks",
             "Phishing attacks",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "The MITRE ATT&CK framework does not include which of the following?",
-          o: [
+          question:
+            "The MITRE ATT&CK framework does not include which of the following?",
+          options: [
             "Real world attack techniques",
             "Tactics and procedures for analysing attacks",
             "Attackers' tactics during the attack phases",
             "List of vulnerabilities of hardware manufacturers",
             "Information to help organisations perform cyber threat modelling",
           ],
-          a: 3,
+          correct: 3,
         },
         {
-          q: "What does ‘anti-malware’ (Anti-Malware) do?",
-          o: [
+          question: "What does ‘anti-malware’ (Anti-Malware) do?",
+          options: [
             "To block viruses",
             "To detect and block malicious software",
             "To monitor network traffic",
             "To manage user accounts",
             "To protect databases",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "What does ‘Vulnerability’ mean?",
-          o: [
+          question: "What does ‘Vulnerability’ mean?",
+          options: [
             "Firewall of the system",
             "Weakness or deficiency in the system",
             "Malware type",
             "Cyber attack method",
             "System for managing user accounts",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "‘AAA’ stands for which concepts?",
-          o: [
+          question: "‘AAA’ stands for which concepts?",
+          options: [
             "Antivirus, Anti-Malware, Accounting",
             "Authentication, Authorisation, Accounting",
             "Advanced Persistent Threat, Anti-Malware, Availability",
             "Authentication, Availability, Auditing",
             "Authorisation, Auditing, Advanced Persistent Threat",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "For which purpose is ‘Domain Controller’ used?",
-          o: [
+          question: "For which purpose is ‘Domain Controller’ used?",
+          options: [
             "To monitor network traffic",
             "To manage and validate user access",
             "To block malicious software",
             "To protect databases",
             "To prevent cyber attacks",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "What is a ‘VPN’ for?",
-          o: [
+          question: "What is a ‘VPN’ for?",
+          options: [
             "To monitor network traffic",
             "To provide a secure and encrypted connection",
             "To block malicious software",
             "To protect databases",
             "To prevent cyber attacks",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "Which of the following is a cyber attack vector?",
-          o: ["HTML", "SQL Injection", "CSS", "JSON", "XML"],
-          a: 1,
+          question: "Which of the following is a cyber attack vector?",
+          options: ["HTML", "SQL Injection", "CSS", "JSON", "XML"],
+          correct: 1,
         },
         {
-          q: "What is a type of attack in which a hacker tries to obtain personal information by using attractive fake messages such as gifts or discounts?",
-          o: ["Phishing", "Vishing", "Tailgating", "Hoax", "Exploit"],
-          a: 0,
+          question:
+            "What is a type of attack in which a hacker tries to obtain personal information by using attractive fake messages such as gifts or discounts?",
+          options: ["Phishing", "Vishing", "Tailgating", "Hoax", "Exploit"],
+          correct: 0,
         },
         {
-          q: "What is the main purpose of DDoS attacks?",
-          o: [
+          question: "What is the main purpose of DDoS attacks?",
+          options: [
             "Providing unauthorised access to the database",
             "Ensuring that servers or networks become unavailable",
             "Guessing users' passwords",
             "Installing malicious software on the system",
             "Hijacking user sessions",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "What is a type of cyber attack in which an attacker attempts to obtain information by gaining the trust of company employees?",
-          o: [
+          question:
+            "What is a type of cyber attack in which an attacker attempts to obtain information by gaining the trust of company employees?",
+          options: [
             "Brute Force",
             "Man in the Middle",
             "Social Engineering",
             "Ransomware",
             "Keylogger",
           ],
-          a: 2,
+          correct: 2,
         },
         {
-          q: "Which of the following systems are targeted by SQL injection?",
-          o: [
+          question:
+            "Which of the following systems are targeted by SQL injection?",
+          options: [
             "DNS Servers",
             "Database Servers",
             "Web Browsers",
             "Email Servers",
             "DHCP Servers",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "Which secure environment is used for testing and analysing malicious software?",
-          o: ["Firewall", "IDS", "SIEM", "Sandbox", "SOC"],
-          a: 3,
+          question:
+            "Which secure environment is used for testing and analysing malicious software?",
+          options: ["Firewall", "IDS", "SIEM", "Sandbox", "SOC"],
+          correct: 3,
         },
         {
-          q: "What malware allows a hacker to record keyboard keystrokes and steal passwords?",
-          o: ["Ransomware", "Keylogger", "Botnet", "Exploit", "Phishing"],
-          a: 1,
+          question:
+            "What malware allows a hacker to record keyboard keystrokes and steal passwords?",
+          options: ["Ransomware", "Keylogger", "Botnet", "Exploit", "Phishing"],
+          correct: 1,
         },
         {
-          q: "Which category of cyber threat does a hacker's use of malicious software to hijack social media accounts fall under?",
-          o: [
+          question:
+            "Which category of cyber threat does a hacker's use of malicious software to hijack social media accounts fall under?",
+          options: [
             "Phishing",
             "Botnet",
             "Ransomware",
             "Zero-Day Exploit",
             "Data Breach",
           ],
-          a: 4,
+          correct: 4,
         },
         {
-          q: "What is a brute force attack?",
-          o: [
+          question: "What is a brute force attack?",
+          options: [
             "Systematic password attempts to gain unauthorised access",
             "Sending fake messages to trick users",
             "Enabling the spread of malicious software on the network",
             "Ransom demand by encrypting files",
             "Recording keyboard keystrokes",
           ],
-          a: 0,
+          correct: 0,
         },
         {
-          q: "Botnet is not used for which of the following?",
-          o: [
+          question: "Botnet is not used for which of the following?",
+          options: [
             "DDoS attacks",
             "Spam e-mail sending",
             "Running mining software",
             "Increasing the effectiveness of antivirus programmes",
             "Spreading malware",
           ],
-          a: 3,
+          correct: 3,
         },
         {
-          q: "Which BYOD model is considered the most secure?",
-          o: ["BYOD", "CYOD", "COPE", "COBO", "None of the above"],
-          a: 3,
+          question: "Which BYOD model is considered the most secure?",
+          options: ["BYOD", "CYOD", "COPE", "COBO", "None of the above"],
+          correct: 3,
         },
         {
-          q: "Dark Web is not used for which of the following?",
-          o: [
+          question: "Dark Web is not used for which of the following?",
+          options: [
             "Anonymous communication",
             "Illegal activities",
             "Avoiding censorship",
             "Scientific research",
             "Banking transactions",
           ],
-          a: 4,
+          correct: 4,
         },
         {
-          q: "What is Zero-Day Vulnerability?",
-          o: [
+          question: "What is Zero-Day Vulnerability?",
+          options: [
             "A deficit that has not yet been identified",
             "Software that encrypts users' data",
             "Phishing attack",
             "Computer keyboard recorder",
             "Data leakage",
           ],
-          a: 0,
+          correct: 0,
         },
         {
-          q: "What is a feature of EDR systems?",
-          o: [
+          question: "What is a feature of EDR systems?",
+          options: [
             "Can be removed by users",
             "Changes passwords automatically",
             "Can isolate remote computers",
             "Deletes all data of the computer",
             "Does not prevent malware infection",
           ],
-          a: 2,
+          correct: 2,
         },
         {
-          q: "What is an ‘Attack Vector’?",
-          o: [
+          question: "What is an ‘Attack Vector’?",
+          options: [
             "A method used for unauthorised access to a computer system.",
             "Software that detects malicious software.",
             "Firewall monitoring network traffic.",
             "System that protects databases.",
             "The system that manages user accounts.",
           ],
-          a: 0,
+          correct: 0,
         },
         {
-          q: "Which of the following is not a type of ‘Attack Vector’?",
-          o: [
+          question: "Which of the following is not a type of ‘Attack Vector’?",
+          options: [
             "DDoS attack",
             "Botnet",
             "Social Engineering",
             "Firewall",
             "SQL Injection",
           ],
-          a: 3,
+          correct: 3,
         },
         {
-          q: "What is ‘Social Engineering’?",
-          o: [
+          question: "What is ‘Social Engineering’?",
+          options: [
             "The art of deceiving people.",
             "A type of malicious software.",
             "A method of monitoring network traffic.",
             "Method of protecting databases.",
             "A method of managing user accounts.",
           ],
-          a: 0,
+          correct: 0,
         },
         {
-          q: "In which ways can a ‘phishing’ attack be carried out?",
-          o: [
+          question: "In which ways can a ‘phishing’ attack be carried out?",
+          options: [
             "E-mail, telephone, SMS",
             "Face to face interview",
             "Physical monitoring",
             "Garbage mixing",
             "Over-the-shoulder surveillance",
           ],
-          a: 0,
+          correct: 0,
         },
         {
-          q: "What does a ‘Brute Force Attack’ target?",
-          o: [
+          question: "What does a ‘Brute Force Attack’ target?",
+          options: [
             "Infiltration of databases",
             "Guessing passwords and usernames",
             "Spreading malware",
             "Blocking network traffic",
             "Consume system resources",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "What does ‘Ransomware’ do?",
-          o: [
+          question: "What does ‘Ransomware’ do?",
+          options: [
             "Deletes databases.",
             "Encrypts files and demands a ransom.",
             "Blocks network traffic.",
             "Consumes system resources.",
             "It hijacks user accounts.",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "What is a ‘Zero-Day Vulnerability’?",
-          o: [
+          question: "What is a ‘Zero-Day Vulnerability’?",
+          options: [
             "A known vulnerability.",
             "An unknown vulnerability.",
             "Type of malware.",
             "Method of monitoring network traffic.",
             "A method of protecting databases.",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "‘SQL Injection’ is an attack on which system?",
-          o: [
+          question: "‘SQL Injection’ is an attack on which system?",
+          options: [
             "Network traffic",
             "Databases",
             "Operating systems",
             "User accounts",
             "Hardware",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "What is a ‘Data Breach’?",
-          o: [
+          question: "What is a ‘Data Breach’?",
+          options: [
             "Malicious software attack.",
             "Data loss as a result of unauthorised access.",
             "Network traffic blocking.",
             "Consume system resources.",
             "Hijacking user accounts.",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "What does ‘Incident Response’ aim to achieve?",
-          o: [
+          question: "What does ‘Incident Response’ aim to achieve?",
+          options: [
             "To prevent attacks",
             "To minimise damage after an attack",
             "Prevent malicious software",
             "Monitor network traffic",
             "Protecting databases",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "What is a 'Honeypot'?",
-          o: [
+          question: "What is a 'Honeypot'?",
+          options: [
             "Software that detects malware.",
             "A trap system designed to attract attacks.",
             "A firewall that monitors network traffic.",
             "A system that protects databases.",
             "A system that manages user accounts.",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "What is the purpose of 'Penetration Testing'?",
-          o: [
+          question: "What is the purpose of 'Penetration Testing'?",
+          options: [
             "Identifying and exploiting security vulnerabilities.",
             "Preventing malware.",
             "Monitoring network traffic.",
             "Protecting databases.",
             "Managing user accounts.",
           ],
-          a: 0,
+          correct: 0,
         },
         {
-          q: "What is 'Critical Infrastructure'?",
-          o: [
+          question: "What is 'Critical Infrastructure'?",
+          options: [
             "Software that detects malware.",
             "Large-scale systems that can cause loss of life and property.",
             "A firewall that monitors network traffic.",
             "A system that protects databases.",
             "A system that manages user accounts.",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "What is the purpose of a 'Business Continuity Plan'?",
-          o: [
+          question: "What is the purpose of a 'Business Continuity Plan'?",
+          options: [
             "Preventing attacks.",
             "Ensuring the continuity of operations in emergencies.",
             "Preventing malware.",
             "Monitoring network traffic.",
             "Protecting databases.",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "Which of the following is not included in encryption methods?",
-          o: [
+          question:
+            "Which of the following is not included in encryption methods?",
+          options: [
             "Hash functions",
             "Authentication",
             "Public key",
             "Private key",
             "Symmetric encryption",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "Which of the following is not related to the performance of encryption algorithms?",
-          o: [
+          question:
+            "Which of the following is not related to the performance of encryption algorithms?",
+          options: [
             "Internet speed",
             "Processor and memory resources used",
             "Number of keys used in the cipher",
             "Password cracking time",
             "Password creation time",
           ],
-          a: 0,
+          correct: 0,
         },
         {
-          q: "Which of the following is not used in RSA encryption?",
-          o: [
+          question: "Which of the following is not used in RSA encryption?",
+          options: [
             "Public Key",
             "Private Key",
             "MD5",
             "Text to be encrypted",
             "Randomly selected prime number",
           ],
-          a: 2,
+          correct: 2,
         },
         {
-          q: "Which of the following is not one of the disadvantages of symmetric encryption?",
-          o: [
+          question:
+            "Which of the following is not one of the disadvantages of symmetric encryption?",
+          options: [
             "Difficulty in key storage",
             "Decryption process time",
             "Authentication",
             "Ensuring integrity",
             "Secure key distribution",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "Which of the following statements about symmetric encryption is true?",
-          o: [
+          question:
+            "Which of the following statements about symmetric encryption is true?",
+          options: [
             "The same key is used for both encryption and decryption",
             "Encryption speed is slower than asymmetric encryption",
             "Not used because key distribution is not secure",
             "Often used to create digital signatures",
             "Decryption is more complex than asymmetric encryption",
           ],
-          a: 0,
+          correct: 0,
         },
         {
-          q: "Which of the following is a disadvantage of asymmetric encryption?",
-          o: [
+          question:
+            "Which of the following is a disadvantage of asymmetric encryption?",
+          options: [
             "Encryption and decryption processes are slower",
             "The key is difficult to share securely",
             "Does not contain an integrity maintenance mechanism",
             "Does not guarantee data security",
             "Uses small size keys",
           ],
-          a: 0,
+          correct: 0,
         },
         {
-          q: "Which of the following is the function of the DNS protocol?",
-          o: [
+          question:
+            "Which of the following is the function of the DNS protocol?",
+          options: [
             "Translates host names to IP addresses.",
             "Holds the IP address of the sender and receiver.",
             "Allows data to be transferred.",
             "It breaks the data coming from the upper layer into pieces of appropriate length.",
             "Matches the IP number with the MAC address.",
           ],
-          a: 0,
+          correct: 0,
         },
         {
-          q: "Which of the following is not distributed by the DHCP protocol?",
-          o: [
+          question:
+            "Which of the following is not distributed by the DHCP protocol?",
+          options: [
             "IP address",
             "Subnet mask",
             "DNS server address",
             "Default gateway address",
             "Host name",
           ],
-          a: 4,
+          correct: 4,
         },
         {
-          q: "Which of the following protocols allows the exchange of electronic mail within a network?",
-          o: ["HTTP", "SMTP", "ICMP", "TCP", "UDP"],
-          a: 1,
+          question:
+            "Which of the following protocols allows the exchange of electronic mail within a network?",
+          options: ["HTTP", "SMTP", "ICMP", "TCP", "UDP"],
+          correct: 1,
         },
         {
-          q: "Which of the following mappings is incorrect?",
-          o: [
+          question: "Which of the following mappings is incorrect?",
+          options: [
             "edu → Educational institutions",
             "com → Commercial organizations",
             "mil → Military institutions",
             "gov → Non-commercial non-governmental organizations",
             "net → Internet service providers",
           ],
-          a: 3,
+          correct: 3,
         },
         {
-          q: "Which of the following is the protocol used to transfer files over the Internet?",
-          o: ["TELNET", "SNMP", "FTP", "WINS", "SSH"],
-          a: 2,
+          question:
+            "Which of the following is the protocol used to transfer files over the Internet?",
+          options: ["TELNET", "SNMP", "FTP", "WINS", "SSH"],
+          correct: 2,
         },
         {
-          q: "Which of the following are transport layer protocols?",
-          o: ["IP-ICMP", "TCP-UDP", "HTTP", "DNS", "ARP"],
-          a: 1,
+          question: "Which of the following are transport layer protocols?",
+          options: ["IP-ICMP", "TCP-UDP", "HTTP", "DNS", "ARP"],
+          correct: 1,
         },
         {
-          q: "Which of the following is an address on an Ethernet card that cannot be changed?",
-          o: ["ARP", "UDP", "MAC", "WINS", "TCP"],
-          a: 2,
+          question:
+            "Which of the following is an address on an Ethernet card that cannot be changed?",
+          options: ["ARP", "UDP", "MAC", "WINS", "TCP"],
+          correct: 2,
         },
         {
-          q: "Which of the following is the equivalent of the Application, Presentation, Session layers in the OSI reference model in the TCP/IP architecture?",
-          o: [
+          question:
+            "Which of the following is the equivalent of the Application, Presentation, Session layers in the OSI reference model in the TCP/IP architecture?",
+          options: [
             "Presentation",
             "Application",
             "Transport",
             "Physical",
             "Network",
           ],
-          a: 1,
+          correct: 1,
         },
         {
-          q: "Which of the following port numbers is the port number used for HTTP protocol?",
-          o: ["21", "80", "443", "25", "3389"],
-          a: 1,
+          question:
+            "Which of the following port numbers is the port number used for HTTP protocol?",
+          options: ["21", "80", "443", "25", "3389"],
+          correct: 1,
         },
         {
-          q: "Which port number does the SSH protocol use?",
-          o: ["21", "22", "23", "25", "80"],
-          a: 1,
+          question: "Which port number does the SSH protocol use?",
+          options: ["21", "22", "23", "25", "80"],
+          correct: 1,
         },
         {
-          q: "Which port number is used for the HTTPS (secure HTTP) protocol?",
-          o: ["21", "22", "25", "80", "443"],
-          a: 4,
+          question:
+            "Which port number is used for the HTTPS (secure HTTP) protocol?",
+          options: ["21", "22", "25", "80", "443"],
+          correct: 4,
         },
         {
-          q: "Which port number is used for DNS?",
-          o: ["21", "22", "80", "53", "67"],
-          a: 3,
+          question: "Which port number is used for DNS?",
+          options: ["21", "22", "80", "53", "67"],
+          correct: 3,
         },
       ];
+      let currentModel = questionsModel1;
+      let currentQuestion = 0;
+      let score = 0;
+      let answered = Array(50).fill(false);
+      let userAnswers = Array(50).fill(null);
+      let wrongQuestions = [];
+      let isRetrying = false;
 
-      let shuffledQuestions = [];
-      let userAnswers = [];
+      const questionArea = document.getElementById("questionArea");
+      const explanationDiv = document.getElementById("explanation");
+      const scoreDiv = document.getElementById("score");
+      const tableBody = document.getElementById("tableBody");
+      const modelSelect = document.getElementById("modelSelect");
+      const submitBtn = document.getElementById("submitBtn");
+      const overlay = document.getElementById("overlay");
+      const popup = document.getElementById("popup");
+      const popupScore = document.getElementById("popupScore");
+      const retryWrongBtn = document.getElementById("retryWrongBtn");
+      const closePopupBtn = document.getElementById("closePopupBtn");
 
-      function loadQuiz() {
-        shuffledQuestions = questions
-          .sort(() => Math.random() - 0.5)
-          .slice(0, 80); // Randomize and take 10 questions
-        const quizDiv = document.getElementById("quiz");
-        quizDiv.innerHTML = "";
-        shuffledQuestions.forEach((q, index) => {
-          const qDiv = document.createElement("div");
-          qDiv.className = "question";
-          qDiv.innerHTML = `<h3>${index + 1}. ${q.q}</h3>`;
-          const optionsDiv = document.createElement("div");
-          optionsDiv.className = "options";
-          q.o.forEach((option, i) => {
-            optionsDiv.innerHTML += `
-                        <label><input type="radio" name="q${index}" value="${i}"> ${option}</label>
-                    `;
-          });
-          qDiv.appendChild(optionsDiv);
-          quizDiv.appendChild(qDiv);
-        });
+      function displayQuestion() {
+        const q = currentModel[currentQuestion];
+        questionArea.innerHTML = `
+          <p class="text-lg text-gray-800">${currentQuestion + 1}. ${
+          q.question
+        }</p>
+          <ul class="space-y-2 mt-2">
+            ${q.options
+              .map(
+                (opt, i) => `
+              <li><label class="flex items-center"><input type="radio" name="answer" value="${i}" ${
+                  answered[currentQuestion] ? "disabled" : ""
+                } class="mr-2"> ${opt}</label></li>
+            `
+              )
+              .join("")}
+          </ul>
+        `;
+        explanationDiv.classList.add("hidden");
+        submitBtn.textContent = answered[currentQuestion]
+          ? "Next"
+          : "Submit Answer";
+        if (
+          answered[currentQuestion] &&
+          userAnswers[currentQuestion] !== null
+        ) {
+          showExplanation();
+        }
       }
 
-      function submitQuiz() {
-        userAnswers = [];
-        let score = 0;
-        shuffledQuestions.forEach((q, index) => {
-          const selected = document.querySelector(
-            `input[name="q${index}"]:checked`
-          );
-          const userAnswer = selected ? parseInt(selected.value) : -1;
-          userAnswers.push(userAnswer);
-          if (userAnswer === q.a) score++;
-        });
-
-        displayResults(score);
+      function updateScore() {
+        scoreDiv.textContent = `Score: ${score}/${currentModel.length}`;
       }
 
-      function displayResults(score) {
-        const resultsDiv = document.getElementById("results");
-        let html = `<h2>Results: ${score}/${shuffledQuestions.length} (${(
-          (score / shuffledQuestions.length) *
-          100
-        ).toFixed(2)}%)</h2>`;
-        html +=
-          "<table><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr>";
-        shuffledQuestions.forEach((q, i) => {
-          const userAns =
-            userAnswers[i] === -1 ? "Not Answered" : q.o[userAnswers[i]];
-          const correctAns = q.o[q.a];
-          const isCorrect = userAnswers[i] === q.a ? "Correct" : "Incorrect";
-          html += `<tr><td>${
-            q.q
-          }</td><td>${userAns}</td><td>${correctAns}</td><td class="${isCorrect.toLowerCase()}">${isCorrect}</td></tr>`;
-        });
-        html += "</table>";
-        resultsDiv.innerHTML = html;
+      function updateTable() {
+        tableBody.innerHTML = currentModel
+          .map((_, i) => {
+            const status = answered[i]
+              ? userAnswers[i] === currentModel[i].correct
+                ? "Correct"
+                : "Incorrect"
+              : "Not Answered";
+            const className = answered[i]
+              ? userAnswers[i] === currentModel[i].correct
+                ? "correct"
+                : "incorrect"
+              : "";
+            return `
+            <tr class="${i % 2 === 0 ? "bg-gray-50" : "bg-white"}">
+              <td class="border p-2">${i + 1}</td>
+              <td class="border p-2 ${className}">${status}</td>
+            </tr>`;
+          })
+          .join("");
       }
 
-      // Load the quiz when the page loads
-      window.onload = loadQuiz;
+      function showExplanation() {
+        const q = currentModel[currentQuestion];
+        const userAnswer = userAnswers[currentQuestion];
+        explanationDiv.classList.remove("hidden");
+        if (userAnswer === q.correct) {
+          explanationDiv.innerHTML = `<p class="correct">Correct!</p>`;
+        } else {
+          explanationDiv.innerHTML = `<p class="incorrect">Wrong! Correct answer: ${
+            q.options[q.correct]
+          }`;
+        }
+      }
+
+      function submitAnswer() {
+        if (answered[currentQuestion]) {
+          goToNextQuestion();
+          return;
+        }
+        const selected = document.querySelector('input[name="answer"]:checked');
+        if (!selected) {
+          alert("Please select an answer!");
+          return;
+        }
+        const answer = parseInt(selected.value);
+        userAnswers[currentQuestion] = answer;
+        answered[currentQuestion] = true;
+        if (answer === currentModel[currentQuestion].correct) {
+          score++;
+        } else {
+          wrongQuestions.push(currentQuestion);
+        }
+        showExplanation();
+        updateScore();
+        updateTable();
+        document
+          .querySelectorAll('input[name="answer"]')
+          .forEach((input) => (input.disabled = true));
+        submitBtn.textContent = "Next";
+      }
+
+      function goToNextQuestion() {
+        currentQuestion++;
+        if (currentQuestion >= currentModel.length) {
+          showScorePopup();
+        } else {
+          displayQuestion();
+        }
+      }
+
+      function showScorePopup() {
+        overlay.style.display = "block";
+        popup.style.display = "block";
+        popupScore.textContent = `Your score: ${score}/${currentModel.length}`;
+        retryWrongBtn.style.display =
+          wrongQuestions.length > 0 ? "inline-block" : "none";
+      }
+
+      function resetQuiz() {
+        currentQuestion = 0;
+        score = 0;
+        answered.fill(false);
+        userAnswers.fill(null);
+        wrongQuestions = [];
+        isRetrying = false;
+
+        if (modelSelect.value === "model1") currentModel = questionsModel1;
+
+        displayQuestion();
+        updateScore();
+        updateTable();
+        overlay.style.display = "none";
+        popup.style.display = "none";
+      }
+
+      function randomizeQuestions() {
+        for (let i = currentModel.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [currentModel[i], currentModel[j]] = [
+            currentModel[j],
+            currentModel[i],
+          ];
+        }
+        resetQuiz();
+      }
+
+      function switchModel() {
+        resetQuiz();
+      }
+
+      function retryWrongQuestions() {
+        if (wrongQuestions.length === 0) return;
+        const wrongIndices = [...wrongQuestions];
+        currentModel = wrongIndices.map((i) => currentModel[i]);
+        currentQuestion = 0;
+        score = 0;
+        answered = Array(currentModel.length).fill(false);
+        userAnswers = Array(currentModel.length).fill(null);
+        wrongQuestions = [];
+        isRetrying = true;
+        displayQuestion();
+        updateScore();
+        updateTable();
+        overlay.style.display = "none";
+        popup.style.display = "none";
+      }
+
+      submitBtn.addEventListener("click", submitAnswer);
+      document.getElementById("resetBtn").addEventListener("click", resetQuiz);
+      document
+        .getElementById("randomBtn")
+        .addEventListener("click", randomizeQuestions);
+      modelSelect.addEventListener("change", switchModel);
+      retryWrongBtn.addEventListener("click", retryWrongQuestions);
+      closePopupBtn.addEventListener("click", () => {
+        overlay.style.display = "none";
+        popup.style.display = "none";
+      });
+
+      displayQuestion();
+      updateScore();
+      updateTable();
     </script>
   </body>
 </html>
