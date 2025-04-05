@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cybersecurity Quiz</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f4f4f4;
+      }
+      .container {
+        max-width: 800px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+      .question {
+        margin-bottom: 20px;
+      }
+      .options label {
+        display: block;
+        margin: 5px 0;
+      }
+      button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      #results {
+        margin-top: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #007bff;
+        color: white;
+      }
+      .correct {
+        color: green;
+      }
+      .incorrect {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Cybersecurity Quiz</h1>
+      <div id="quiz"></div>
+      <button onclick="submitQuiz()">Submit Quiz</button>
+      <div id="results"></div>
+    </div>
+
+    <script>
+      const questions = [
+        {
+          q: "Which of the following is an example of a breach of confidentiality?",
+          o: [
+            "An employee leaks internal data to an unauthorised person",
+            "An attacker changes the data in the system",
+            "Inability of a system to provide service to its users",
+            "An employee accidentally downloads malware via e-mail",
+            "A firewall monitors and filters network traffic",
+          ],
+          a: 0,
+        },
+        {
+          q: "Which of the following is the most commonly used method to recognise that Integrity has been compromised?",
+          o: [
+            "VPN usage",
+            "Hashing algorithms",
+            "Encryption algorithms",
+            "Antivirus software",
+            "IDS/IPS systems",
+          ],
+          a: 1,
+        },
+        {
+          q: "Which of the following is not one of the types of insider threat?",
+          o: [
+            "Negligent Insider Threat",
+            "Malicious Insider Threat",
+            "Mole",
+            "Firewall attacker (Firewall Attacker)",
+            "Turncloak",
+          ],
+          a: 3,
+        },
+        {
+          q: "Which of the following is a correct statement about advanced persistent threats (APT)?",
+          o: [
+            "APT attacks are usually detected in a short time.",
+            "APT attacks aim to cause random and sudden damage.",
+            "APT attacks can remain undetected for a long time.",
+            "APT attacks are usually carried out by individual hackers.",
+            "APT attacks are only carried out by large states.",
+          ],
+          a: 2,
+        },
+        {
+          q: "Which of the following is a correct statement about the Cyber Kill Chain model?",
+          o: [
+            "It covers only authentication processes.",
+            "It is an approach to understanding all stages of an attack.",
+            "It is not used to analyse advanced persistent threats (APT).",
+            "It can only be implemented by network security devices.",
+            "It is an ineffective model against external threats.",
+          ],
+          a: 1,
+        },
+        {
+          q: "Which of the following is one of the differences between Antivirus and Anti-Malware software?",
+          o: [
+            "Antivirus only protects against computer viruses, but Anti-Malware is more comprehensive.",
+            "Anti-Malware software cannot detect malware.",
+            "Antivirus programmes are more advanced than Anti-Malware software.",
+            "Anti-Malware software only scans e-mails.",
+            "Antivirus software is used to prevent hackers.",
+          ],
+          a: 0,
+        },
+        {
+          q: "The AAA security model does not include which of the following?",
+          o: [
+            "Authentication",
+            "Authorisation",
+            "Accounting",
+            "Encryption",
+            "Access control",
+          ],
+          a: 3,
+        },
+        {
+          q: "Which of the following is not one of the functions of a Firewall?",
+          o: [
+            "Filtering network traffic",
+            "Prevent unauthorised access",
+            "Detect malware",
+            "Work like an intrusion detection system (IDS)",
+            "Analysing incoming and outgoing data",
+          ],
+          a: 2,
+        },
+        {
+          q: "What is a DMZ (Demilitarised Zone)?",
+          o: [
+            "It is a network structure where firewalls are completely removed.",
+            "It is a zone where all requests from the external network are directed to the internal network.",
+            "It is a security zone between the internal and external network where certain services are provided.",
+            "It is a network area that is not protected against security threats.",
+            "A private network used for VPN connections.",
+          ],
+          a: 2,
+        },
+        {
+          q: "What is the main difference between IDS and IPS?",
+          o: [
+            "IDS blocks attacks, IPS only detects them.",
+            "IPS prevents attacks, IDS only detects them.",
+            "IDS works only against external threats, while IPS focuses on internal threats.",
+            "IPS is only used against physical security threats.",
+            "IDS provides real-time protection, while IPS operates on a time delay.",
+          ],
+          a: 1,
+        },
+        {
+          q: "What is the main task of a Domain Controller?",
+          o: [
+            "Authenticate users and manage access permissions",
+            "Encrypt all network traffic",
+            "To make firewall configurations",
+            "Blocking malicious software",
+            "Manage backup operations on the network",
+          ],
+          a: 0,
+        },
+        {
+          q: "DNS (Domain Name System) does which of the following?",
+          o: [
+            "Translates IP addresses into domain names.",
+            "Provides e-mail security.",
+            "Detects network attacks.",
+            "Performs secure file transfer.",
+            "Performs antivirus scans.",
+          ],
+          a: 0,
+        },
+        {
+          q: "Which of the following is not one of the types of vulnerability of a system?",
+          o: [
+            "Technical vulnerability",
+            "Human-induced vulnerability",
+            "Hardware vulnerability",
+            "Software vulnerability",
+            "Cryptographic key security",
+          ],
+          a: 4,
+        },
+        {
+          q: "Which type of insider threat is an employee unknowingly infecting a system with malware by clicking on a malicious link?",
+          o: [
+            "Malicious internal threat",
+            "Careless internal threat",
+            "Mole",
+            "APT attack",
+            "Social engineering attack",
+          ],
+          a: 1,
+        },
+        {
+          q: "What is the main purpose of confidentiality in cyber security?",
+          o: [
+            "To ensure that data is accessible.",
+            "To prevent unauthorised access to data.",
+            "To ensure data integrity.",
+            "To improve system performance.",
+            "Reduce network latency.",
+          ],
+          a: 1,
+        },
+        {
+          q: "Which of the following is used to verify data integrity?",
+          o: ["Encryption", "Hashing", "Firewall", "VPN", "Proxy Server"],
+          a: 1,
+        },
+        {
+          q: "Which type of threat involves complex, long-term attacks, usually sponsored by states?",
+          o: [
+            "Insider Threat",
+            "Advanced Persistent Threat (APT)",
+            "Phishing",
+            "Ransomware",
+            "Malicious Software",
+          ],
+          a: 1,
+        },
+        {
+          q: "What does the Cyber Kill Chain model help organisations with?",
+          o: [
+            "Identifying vulnerabilities.",
+            "Understanding and countering cyber attacks.",
+            "Encrypting data.",
+            "To manage user access.",
+            "To improve network performance.",
+          ],
+          a: 1,
+        },
+        {
+          q: "Which of the following refers to the concept of ‘Availability’?",
+          o: [
+            "Protection of information from unauthorised persons",
+            "Ensuring the integrity of information and data",
+            "Accessibility of information by relevant persons",
+            "Protection of data by encryption",
+            "Protection of the system against unauthorised access",
+          ],
+          a: 2,
+        },
+        {
+          q: "For what purpose is ‘non-repudiation’ used?",
+          o: [
+            "For encryption of data",
+            "To ensure data integrity",
+            "For proof of data ownership",
+            "To prevent unauthorised access to the system",
+            "To increase the data access speed",
+          ],
+          a: 2,
+        },
+        {
+          q: "‘Hashing’ is usually used to provide which security policy?",
+          o: [
+            "Confidentiality",
+            "Integrity",
+            "Accessibility",
+            "Non repudation",
+            "Authorisation",
+          ],
+          a: 1,
+        },
+        {
+          q: "Which of the following is not a type of ‘Threat’?",
+          o: [
+            "Malicious software (Malware)",
+            "Ransomware",
+            "Phishing",
+            "Firewall (Firewall)",
+            "Insider Threat",
+          ],
+          a: 3,
+        },
+        {
+          q: "What is an ‘Insider Threat’?",
+          o: [
+            "External cyber attacks",
+            "Security risks arising from within the organisation",
+            "Malware attacks",
+            "Firewalls blocking network traffic",
+            "Phishing attacks",
+          ],
+          a: 1,
+        },
+        {
+          q: "What does ‘Advanced Persistent Threat’ (APT) mean?",
+          o: [
+            "Short-term and sudden cyber attacks",
+            "Long-lasting and difficult to detect cyber attacks",
+            "Malware attacks",
+            "Ransomware attacks",
+            "Phishing attacks",
+          ],
+          a: 1,
+        },
+        {
+          q: "The MITRE ATT&CK framework does not include which of the following?",
+          o: [
+            "Real world attack techniques",
+            "Tactics and procedures for analysing attacks",
+            "Attackers' tactics during the attack phases",
+            "List of vulnerabilities of hardware manufacturers",
+            "Information to help organisations perform cyber threat modelling",
+          ],
+          a: 3,
+        },
+        {
+          q: "What does ‘anti-malware’ (Anti-Malware) do?",
+          o: [
+            "To block viruses",
+            "To detect and block malicious software",
+            "To monitor network traffic",
+            "To manage user accounts",
+            "To protect databases",
+          ],
+          a: 1,
+        },
+        {
+          q: "What does ‘Vulnerability’ mean?",
+          o: [
+            "Firewall of the system",
+            "Weakness or deficiency in the system",
+            "Malware type",
+            "Cyber attack method",
+            "System for managing user accounts",
+          ],
+          a: 1,
+        },
+        {
+          q: "‘AAA’ stands for which concepts?",
+          o: [
+            "Antivirus, Anti-Malware, Accounting",
+            "Authentication, Authorisation, Accounting",
+            "Advanced Persistent Threat, Anti-Malware, Availability",
+            "Authentication, Availability, Auditing",
+            "Authorisation, Auditing, Advanced Persistent Threat",
+          ],
+          a: 1,
+        },
+        {
+          q: "For which purpose is ‘Domain Controller’ used?",
+          o: [
+            "To monitor network traffic",
+            "To manage and validate user access",
+            "To block malicious software",
+            "To protect databases",
+            "To prevent cyber attacks",
+          ],
+          a: 1,
+        },
+        {
+          q: "What is a ‘VPN’ for?",
+          o: [
+            "To monitor network traffic",
+            "To provide a secure and encrypted connection",
+            "To block malicious software",
+            "To protect databases",
+            "To prevent cyber attacks",
+          ],
+          a: 1,
+        },
+        {
+          q: "Which of the following is a cyber attack vector?",
+          o: ["HTML", "SQL Injection", "CSS", "JSON", "XML"],
+          a: 1,
+        },
+        {
+          q: "What is a type of attack in which a hacker tries to obtain personal information by using attractive fake messages such as gifts or discounts?",
+          o: ["Phishing", "Vishing", "Tailgating", "Hoax", "Exploit"],
+          a: 0,
+        },
+        {
+          q: "What is the main purpose of DDoS attacks?",
+          o: [
+            "Providing unauthorised access to the database",
+            "Ensuring that servers or networks become unavailable",
+            "Guessing users' passwords",
+            "Installing malicious software on the system",
+            "Hijacking user sessions",
+          ],
+          a: 1,
+        },
+        {
+          q: "What is a type of cyber attack in which an attacker attempts to obtain information by gaining the trust of company employees?",
+          o: [
+            "Brute Force",
+            "Man in the Middle",
+            "Social Engineering",
+            "Ransomware",
+            "Keylogger",
+          ],
+          a: 2,
+        },
+        {
+          q: "Which of the following systems are targeted by SQL injection?",
+          o: [
+            "DNS Servers",
+            "Database Servers",
+            "Web Browsers",
+            "Email Servers",
+            "DHCP Servers",
+          ],
+          a: 1,
+        },
+        {
+          q: "Which secure environment is used for testing and analysing malicious software?",
+          o: ["Firewall", "IDS", "SIEM", "Sandbox", "SOC"],
+          a: 3,
+        },
+        {
+          q: "What malware allows a hacker to record keyboard keystrokes and steal passwords?",
+          o: ["Ransomware", "Keylogger", "Botnet", "Exploit", "Phishing"],
+          a: 1,
+        },
+        {
+          q: "Which category of cyber threat does a hacker's use of malicious software to hijack social media accounts fall under?",
+          o: [
+            "Phishing",
+            "Botnet",
+            "Ransomware",
+            "Zero-Day Exploit",
+            "Data Breach",
+          ],
+          a: 4,
+        },
+        {
+          q: "What is a brute force attack?",
+          o: [
+            "Systematic password attempts to gain unauthorised access",
+            "Sending fake messages to trick users",
+            "Enabling the spread of malicious software on the network",
+            "Ransom demand by encrypting files",
+            "Recording keyboard keystrokes",
+          ],
+          a: 0,
+        },
+        {
+          q: "Botnet is not used for which of the following?",
+          o: [
+            "DDoS attacks",
+            "Spam e-mail sending",
+            "Running mining software",
+            "Increasing the effectiveness of antivirus programmes",
+            "Spreading malware",
+          ],
+          a: 3,
+        },
+        {
+          q: "Which BYOD model is considered the most secure?",
+          o: ["BYOD", "CYOD", "COPE", "COBO", "None of the above"],
+          a: 3,
+        },
+        {
+          q: "Dark Web is not used for which of the following?",
+          o: [
+            "Anonymous communication",
+            "Illegal activities",
+            "Avoiding censorship",
+            "Scientific research",
+            "Banking transactions",
+          ],
+          a: 4,
+        },
+        {
+          q: "What is Zero-Day Vulnerability?",
+          o: [
+            "A deficit that has not yet been identified",
+            "Software that encrypts users' data",
+            "Phishing attack",
+            "Computer keyboard recorder",
+            "Data leakage",
+          ],
+          a: 0,
+        },
+        {
+          q: "What is a feature of EDR systems?",
+          o: [
+            "Can be removed by users",
+            "Changes passwords automatically",
+            "Can isolate remote computers",
+            "Deletes all data of the computer",
+            "Does not prevent malware infection",
+          ],
+          a: 2,
+        },
+        {
+          q: "What is an ‘Attack Vector’?",
+          o: [
+            "A method used for unauthorised access to a computer system.",
+            "Software that detects malicious software.",
+            "Firewall monitoring network traffic.",
+            "System that protects databases.",
+            "The system that manages user accounts.",
+          ],
+          a: 0,
+        },
+        {
+          q: "Which of the following is not a type of ‘Attack Vector’?",
+          o: [
+            "DDoS attack",
+            "Botnet",
+            "Social Engineering",
+            "Firewall",
+            "SQL Injection",
+          ],
+          a: 3,
+        },
+        {
+          q: "What is ‘Social Engineering’?",
+          o: [
+            "The art of deceiving people.",
+            "A type of malicious software.",
+            "A method of monitoring network traffic.",
+            "Method of protecting databases.",
+            "A method of managing user accounts.",
+          ],
+          a: 0,
+        },
+        {
+          q: "In which ways can a ‘phishing’ attack be carried out?",
+          o: [
+            "E-mail, telephone, SMS",
+            "Face to face interview",
+            "Physical monitoring",
+            "Garbage mixing",
+            "Over-the-shoulder surveillance",
+          ],
+          a: 0,
+        },
+        {
+          q: "What does a ‘Brute Force Attack’ target?",
+          o: [
+            "Infiltration of databases",
+            "Guessing passwords and usernames",
+            "Spreading malware",
+            "Blocking network traffic",
+            "Consume system resources",
+          ],
+          a: 1,
+        },
+        {
+          q: "What does ‘Ransomware’ do?",
+          o: [
+            "Deletes databases.",
+            "Encrypts files and demands a ransom.",
+            "Blocks network traffic.",
+            "Consumes system resources.",
+            "It hijacks user accounts.",
+          ],
+          a: 1,
+        },
+        {
+          q: "What is a ‘Zero-Day Vulnerability’?",
+          o: [
+            "A known vulnerability.",
+            "An unknown vulnerability.",
+            "Type of malware.",
+            "Method of monitoring network traffic.",
+            "A method of protecting databases.",
+          ],
+          a: 1,
+        },
+        {
+          q: "‘SQL Injection’ is an attack on which system?",
+          o: [
+            "Network traffic",
+            "Databases",
+            "Operating systems",
+            "User accounts",
+            "Hardware",
+          ],
+          a: 1,
+        },
+        {
+          q: "What is a ‘Data Breach’?",
+          o: [
+            "Malicious software attack.",
+            "Data loss as a result of unauthorised access.",
+            "Network traffic blocking.",
+            "Consume system resources.",
+            "Hijacking user accounts.",
+          ],
+          a: 1,
+        },
+        {
+          q: "What does ‘Incident Response’ aim to achieve?",
+          o: [
+            "To prevent attacks",
+            "To minimise damage after an attack",
+            "Prevent malicious software",
+            "Monitor network traffic",
+            "Protecting databases",
+          ],
+          a: 1,
+        },
+        {
+          q: "What is a 'Honeypot'?",
+          o: [
+            "Software that detects malware.",
+            "A trap system designed to attract attacks.",
+            "A firewall that monitors network traffic.",
+            "A system that protects databases.",
+            "A system that manages user accounts.",
+          ],
+          a: 1,
+        },
+        {
+          q: "What is the purpose of 'Penetration Testing'?",
+          o: [
+            "Identifying and exploiting security vulnerabilities.",
+            "Preventing malware.",
+            "Monitoring network traffic.",
+            "Protecting databases.",
+            "Managing user accounts.",
+          ],
+          a: 0,
+        },
+        {
+          q: "What is 'Critical Infrastructure'?",
+          o: [
+            "Software that detects malware.",
+            "Large-scale systems that can cause loss of life and property.",
+            "A firewall that monitors network traffic.",
+            "A system that protects databases.",
+            "A system that manages user accounts.",
+          ],
+          a: 1,
+        },
+        {
+          q: "What is the purpose of a 'Business Continuity Plan'?",
+          o: [
+            "Preventing attacks.",
+            "Ensuring the continuity of operations in emergencies.",
+            "Preventing malware.",
+            "Monitoring network traffic.",
+            "Protecting databases.",
+          ],
+          a: 1,
+        },
+        {
+          q: "Which of the following is not included in encryption methods?",
+          o: [
+            "Hash functions",
+            "Authentication",
+            "Public key",
+            "Private key",
+            "Symmetric encryption",
+          ],
+          a: 1,
+        },
+        {
+          q: "Which of the following is not related to the performance of encryption algorithms?",
+          o: [
+            "Internet speed",
+            "Processor and memory resources used",
+            "Number of keys used in the cipher",
+            "Password cracking time",
+            "Password creation time",
+          ],
+          a: 0,
+        },
+        {
+          q: "Which of the following is not used in RSA encryption?",
+          o: [
+            "Public Key",
+            "Private Key",
+            "MD5",
+            "Text to be encrypted",
+            "Randomly selected prime number",
+          ],
+          a: 2,
+        },
+        {
+          q: "Which of the following is not one of the disadvantages of symmetric encryption?",
+          o: [
+            "Difficulty in key storage",
+            "Decryption process time",
+            "Authentication",
+            "Ensuring integrity",
+            "Secure key distribution",
+          ],
+          a: 1,
+        },
+        {
+          q: "Which of the following statements about symmetric encryption is true?",
+          o: [
+            "The same key is used for both encryption and decryption",
+            "Encryption speed is slower than asymmetric encryption",
+            "Not used because key distribution is not secure",
+            "Often used to create digital signatures",
+            "Decryption is more complex than asymmetric encryption",
+          ],
+          a: 0,
+        },
+        {
+          q: "Which of the following is a disadvantage of asymmetric encryption?",
+          o: [
+            "Encryption and decryption processes are slower",
+            "The key is difficult to share securely",
+            "Does not contain an integrity maintenance mechanism",
+            "Does not guarantee data security",
+            "Uses small size keys",
+          ],
+          a: 0,
+        },
+        {
+          q: "Which of the following is the function of the DNS protocol?",
+          o: [
+            "Translates host names to IP addresses.",
+            "Holds the IP address of the sender and receiver.",
+            "Allows data to be transferred.",
+            "It breaks the data coming from the upper layer into pieces of appropriate length.",
+            "Matches the IP number with the MAC address.",
+          ],
+          a: 0,
+        },
+        {
+          q: "Which of the following is not distributed by the DHCP protocol?",
+          o: [
+            "IP address",
+            "Subnet mask",
+            "DNS server address",
+            "Default gateway address",
+            "Host name",
+          ],
+          a: 4,
+        },
+        {
+          q: "Which of the following protocols allows the exchange of electronic mail within a network?",
+          o: ["HTTP", "SMTP", "ICMP", "TCP", "UDP"],
+          a: 1,
+        },
+        {
+          q: "Which of the following mappings is incorrect?",
+          o: [
+            "edu → Educational institutions",
+            "com → Commercial organizations",
+            "mil → Military institutions",
+            "gov → Non-commercial non-governmental organizations",
+            "net → Internet service providers",
+          ],
+          a: 3,
+        },
+        {
+          q: "Which of the following is the protocol used to transfer files over the Internet?",
+          o: ["TELNET", "SNMP", "FTP", "WINS", "SSH"],
+          a: 2,
+        },
+        {
+          q: "Which of the following are transport layer protocols?",
+          o: ["IP-ICMP", "TCP-UDP", "HTTP", "DNS", "ARP"],
+          a: 1,
+        },
+        {
+          q: "Which of the following is an address on an Ethernet card that cannot be changed?",
+          o: ["ARP", "UDP", "MAC", "WINS", "TCP"],
+          a: 2,
+        },
+        {
+          q: "Which of the following is the equivalent of the Application, Presentation, Session layers in the OSI reference model in the TCP/IP architecture?",
+          o: [
+            "Presentation",
+            "Application",
+            "Transport",
+            "Physical",
+            "Network",
+          ],
+          a: 1,
+        },
+        {
+          q: "Which of the following port numbers is the port number used for HTTP protocol?",
+          o: ["21", "80", "443", "25", "3389"],
+          a: 1,
+        },
+        {
+          q: "Which port number does the SSH protocol use?",
+          o: ["21", "22", "23", "25", "80"],
+          a: 1,
+        },
+        {
+          q: "Which port number is used for the HTTPS (secure HTTP) protocol?",
+          o: ["21", "22", "25", "80", "443"],
+          a: 4,
+        },
+        {
+          q: "Which port number is used for DNS?",
+          o: ["21", "22", "80", "53", "67"],
+          a: 3,
+        },
+      ];
+
+      let shuffledQuestions = [];
+      let userAnswers = [];
+
+      function loadQuiz() {
+        shuffledQuestions = questions
+          .sort(() => Math.random() - 0.5)
+          .slice(0, 80); // Randomize and take 10 questions
+        const quizDiv = document.getElementById("quiz");
+        quizDiv.innerHTML = "";
+        shuffledQuestions.forEach((q, index) => {
+          const qDiv = document.createElement("div");
+          qDiv.className = "question";
+          qDiv.innerHTML = `<h3>${index + 1}. ${q.q}</h3>`;
+          const optionsDiv = document.createElement("div");
+          optionsDiv.className = "options";
+          q.o.forEach((option, i) => {
+            optionsDiv.innerHTML += `
+                        <label><input type="radio" name="q${index}" value="${i}"> ${option}</label>
+                    `;
+          });
+          qDiv.appendChild(optionsDiv);
+          quizDiv.appendChild(qDiv);
+        });
+      }
+
+      function submitQuiz() {
+        userAnswers = [];
+        let score = 0;
+        shuffledQuestions.forEach((q, index) => {
+          const selected = document.querySelector(
+            `input[name="q${index}"]:checked`
+          );
+          const userAnswer = selected ? parseInt(selected.value) : -1;
+          userAnswers.push(userAnswer);
+          if (userAnswer === q.a) score++;
+        });
+
+        displayResults(score);
+      }
+
+      function displayResults(score) {
+        const resultsDiv = document.getElementById("results");
+        let html = `<h2>Results: ${score}/${shuffledQuestions.length} (${(
+          (score / shuffledQuestions.length) *
+          100
+        ).toFixed(2)}%)</h2>`;
+        html +=
+          "<table><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr>";
+        shuffledQuestions.forEach((q, i) => {
+          const userAns =
+            userAnswers[i] === -1 ? "Not Answered" : q.o[userAnswers[i]];
+          const correctAns = q.o[q.a];
+          const isCorrect = userAnswers[i] === q.a ? "Correct" : "Incorrect";
+          html += `<tr><td>${
+            q.q
+          }</td><td>${userAns}</td><td>${correctAns}</td><td class="${isCorrect.toLowerCase()}">${isCorrect}</td></tr>`;
+        });
+        html += "</table>";
+        resultsDiv.innerHTML = html;
+      }
+
+      // Load the quiz when the page loads
+      window.onload = loadQuiz;
+    </script>
+  </body>
+</html>
