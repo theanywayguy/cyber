@@ -48,6 +48,7 @@
           >
           <select id="modelSelect" class="p-2 border rounded-lg">
             <option value="model1">MODEL 1</option>
+            <option value="model2">MODEL 2</option>
           </select>
         </div>
         <div id="score" class="text-lg text-gray-700 mb-4">Score: 0/50</div>
@@ -892,6 +893,487 @@
           correct: 3,
         },
       ];
+      const questionsModel2 = [
+        [
+          {
+            question:
+              "Aşağıdaki terimlerden hangisi bir sistemdeki yetkisiz erişimi tespit etmek için kullanılan bir yöntemi ifade eder?",
+            options: ["DoS", "Phishing", "Brute-force", "IDS", "Malware"],
+            correct: 3,
+          },
+          {
+            question:
+              "Simetrik şifreleme algoritmalarından hangisi günümüzde en yaygın kullanılanlardan biridir?",
+            options: ["RSA", "AES", "SHA-256", "ECC", "Diffie-Hellman"],
+            correct: 1,
+          },
+          {
+            question:
+              "Bir ağdaki cihazların MAC adreslerini öğrenmek için hangi protokol kullanılır?",
+            options: ["ICMP", "ARP", "DNS", "HTTP", "TCP"],
+            correct: 1,
+          },
+          {
+            question: "Bir firewall’un temel işlevlerinden biri nedir?",
+            options: [
+              "Dosya şifreleme",
+              "Ağ analizi",
+              "Güvenlik açıklarını tarama",
+              "Trafiği filtrelemek",
+              "Yedekleme yapmak",
+            ],
+            correct: 3,
+          },
+          {
+            question:
+              "Active Directory’de kullanıcıların ve kaynakların gruplandırılması için kullanılan yapı nedir?",
+            options: [
+              "Subnet",
+              "Group Policy",
+              "Domain Controller",
+              "OU (Organizational Unit)",
+              "Forest",
+            ],
+            correct: 3,
+          },
+          {
+            question:
+              "Nmap ile bir hedef sistemdeki açık portları taramak için hangi komut kullanılır?",
+            options: ["nmap -sU", "nmap -A", "nmap -p", "nmap -O", "nmap -sS"],
+            correct: 4,
+          },
+          {
+            question:
+              "SSH (Secure Shell) servisi genellikle hangi portta çalışır?",
+            options: ["20", "21", "22", "23", "25"],
+            correct: 2,
+          },
+          {
+            question:
+              "Bir sistemdeki hassas bilgilere yetkisiz erişim sağlamak için sosyal mühendislik yöntemiyle yapılan saldırı türü nedir?",
+            options: [
+              "DoS",
+              "Phishing",
+              "SQL Injection",
+              "Spoofing",
+              "Brute-force",
+            ],
+            correct: 1,
+          },
+          {
+            question:
+              "Asimetrik şifrelemede kullanılan anahtar çiftleri hangileridir?",
+            options: [
+              "Salt ve Hash",
+              "Private Key ve Secret Key",
+              "Public Key ve AES Key",
+              "Private Key ve Public Key",
+              "Nonce ve Session Key",
+            ],
+            correct: 3,
+          },
+          {
+            question:
+              "Bir ağda IP adreslerini otomatik olarak atamak için kullanılan protokol nedir?",
+            options: ["DNS", "ARP", "NTP", "DHCP", "ICMP"],
+            correct: 3,
+          },
+          {
+            question:
+              "Stateful Inspection yapan bir firewall’un temel özelliği nedir?",
+            options: [
+              "Paketleri rastgele engelleme",
+              "Durum bilgisi tutmadan çalışması",
+              "Yalnızca giden trafiği kontrol etmesi",
+              "Bağlantı durumuna göre karar vermesi",
+              "MAC adreslerini denetlemesi",
+            ],
+            correct: 3,
+          },
+          {
+            question:
+              "Active Directory’de tüm ormanı kapsayan en üst seviye yapı nedir?",
+            options: ["Domain", "OU", "Tree", "Group Policy", "Forest"],
+            correct: 4,
+          },
+          {
+            question:
+              "Nmap ile bir hedef sistemin işletim sistemini tespit etmek için hangi parametre kullanılır?",
+            options: ["-sV", "-O", "-A", "-sT", "-p"],
+            correct: 1,
+          },
+          {
+            question: "HTTPS (Güvenli Web) servisi hangi portta çalışır?",
+            options: ["80", "20", "22", "443", "21"],
+            correct: 3,
+          },
+          {
+            question:
+              "Bir sistemde yetkisiz bir şekilde yönetici hakları elde etme işlemi nedir?",
+            options: [
+              "Sniffing",
+              "Escalation",
+              "Brute-force",
+              "Privilege Escalation",
+              "Enumeration",
+            ],
+            correct: 3,
+          },
+          {
+            question:
+              "Aşağıdaki algoritmalardan hangisi bir hash fonksiyonudur?",
+            options: ["AES", "RSA", "Blowfish", "SHA-256", "Diffie-Hellman"],
+            correct: 3,
+          },
+          {
+            question:
+              "Bir ağda Denial of Service (DoS) saldırısının temel amacı nedir?",
+            options: [
+              "Veri şifrelemek",
+              "Sistemi güncellemek",
+              "Yetkisiz erişim sağlamak",
+              "Servisi kullanılmaz hale getirmek",
+              "Yedek almak",
+            ],
+            correct: 3,
+          },
+          {
+            question:
+              "Bir firewall’da “Drop” ve “Reject” arasındaki fark nedir?",
+            options: [
+              "Drop paketle birlikte hata döner",
+              "Reject paketi sessizce bırakır",
+              "Drop cevap vermez, Reject hata döner",
+              "Reject loglamaz",
+              "İkisi de aynıdır",
+            ],
+            correct: 2,
+          },
+          {
+            question:
+              "Active Directory’de kullanıcıların kimlik doğrulamasını hangi protokol sağlar?",
+            options: ["DHCP", "NTP", "ICMP", "LDAP", "KDC"],
+            correct: 4,
+          },
+          {
+            question:
+              "Nmap ile UDP portlarını taramak için hangi parametre kullanılır?",
+            options: ["-sT", "-O", "-sS", "-sU", "-Pn"],
+            correct: 3,
+          },
+        ],
+        [
+          {
+            question:
+              "Bir sistemde yetkisiz erişimi tespit etmek için kullanılan bir SIEM sisteminin temel işlevi nedir?",
+            options: [
+              "Kullanıcı şifrelerini yönetmek",
+              "Veri şifrelemek",
+              "Ağ trafiğini yedeklemek",
+              "Günlük verileri analiz ederek saldırıları tespit etmek",
+              "Firewall yapılandırması yapmak",
+            ],
+            correct: 3,
+          },
+          {
+            question: "Bir dijital imzanın temel amacı nedir?",
+            options: [
+              "Dosya sıkıştırma",
+              "Kimlik doğrulama ve bütünlük sağlama",
+              "Dosya boyutunu artırma",
+              "Ağ performansını artırma",
+              "Erişim loglama",
+            ],
+            correct: 1,
+          },
+          {
+            question:
+              "Bir Man-in-the-Middle (MitM) saldırısını önlemek için en etkili yöntem nedir?",
+            options: [
+              "DHCP kullanımını artırmak",
+              "MAC adresini değiştirmek",
+              "Şifreli protokoller (SSL/TLS) kullanmak",
+              "ICMP trafiğini engellemek",
+              "Ping testi yapmak",
+            ],
+            correct: 2,
+          },
+          {
+            question:
+              "Bir firewall’da “DMZ” (Demilitarized Zone) ne anlama gelir?",
+            options: [
+              "Yalnızca dış IP'lerin erişebileceği alan",
+              "Sistem güncelleme bölgesi",
+              "Logların tutulduğu alan",
+              "İç ve dış ağ arasında izole edilmiş alan",
+              "Antivirüs kontrol noktası",
+            ],
+            correct: 3,
+          },
+          {
+            question:
+              "Bir Active Directory ortamında grup ilkesi (Group Policy) hangi amaçla kullanılır?",
+            options: [
+              "Ağ trafiğini yönlendirmek",
+              "Kullanıcı davranışlarını izlemek",
+              "Kullanıcılara erişim ve yapılandırma ayarları uygulamak",
+              "Port taraması yapmak",
+              "Şifreleme algoritması belirlemek",
+            ],
+            correct: 2,
+          },
+          {
+            question:
+              "Nmap ile bir taramanın daha az tespit edilebilir olması için hangi parametre kullanılır?",
+            options: ["-sU", "-T5", "-sA", "-Pn", "-sS"],
+            correct: 3,
+          },
+          {
+            question:
+              "RDP (Remote Desktop Protocol) servisi hangi portta çalışır?",
+            options: ["3389", "3306", "21", "443", "5900"],
+            correct: 0,
+          },
+          {
+            question: "Bir “Zero-Day” açığı nedir?",
+            options: [
+              "Yama uygulanmış ama açık kalan güvenlik zafiyeti",
+              "Henüz bilinmeyen ve henüz yaması olmayan açık",
+              "Ağ donanımı arızası",
+              "Veritabanı hatası",
+              "Erişim kontrol listesi hatası",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Bir şifreleme sisteminde “nonce” ne anlama gelir?",
+            options: [
+              "Anahtar takası",
+              "Tek kullanımlık rastgele sayı",
+              "Şifre çözme işlemi",
+              "Sabit anahtar",
+              "Hash algoritması",
+            ],
+            correct: 1,
+          },
+          {
+            question:
+              "Bir ağda ARP zehirlenmesi (ARP Poisoning) saldırısı nasıl gerçekleştirilir?",
+            options: [
+              "DHCP sunucusunu devre dışı bırakarak",
+              "Sahte ARP yanıtları göndererek",
+              "Firewall yapılandırmasıyla",
+              "Port engelleyerek",
+              "İçerik filtreleme ile",
+            ],
+            correct: 1,
+          },
+          {
+            question:
+              "Bir firewall’da “NAT” (Network Address Translation) ne işe yarar?",
+            options: [
+              "Verileri sıkıştırmak",
+              "Ağ kartını değiştirmek",
+              "IP adreslerini gizleyerek iç-dış IP dönüşümü sağlamak",
+              "Dosya paylaşımını engellemek",
+              "MAC adresini değiştirmek",
+            ],
+            correct: 2,
+          },
+          {
+            question:
+              "Bir Active Directory ortamında “Trust” ilişkisi neyi ifade eder?",
+            options: [
+              "Yedekleme ilişkisini",
+              "IP adres eşlemesini",
+              "Domain'ler arası güven ilişkisini",
+              "Ağ geçidi bağlantısını",
+              "Firewall yönlendirmesini",
+            ],
+            correct: 2,
+          },
+          {
+            question:
+              "Nmap ile bir hedef ağdaki tüm cihazları keşfetmek için hangi komut kullanılır?",
+            options: ["nmap -p", "nmap -O", "nmap -T4", "nmap -sn", "nmap -sT"],
+            correct: 3,
+          },
+          {
+            question:
+              "SMB (Server Message Block) protokolü genellikle hangi portta çalışır?",
+            options: ["80", "21", "22", "139 veya 445", "3389"],
+            correct: 3,
+          },
+          {
+            question: "Bir “Rootkit” nedir?",
+            options: [
+              "Veri sıkıştırma aracı",
+              "Yedekleme aracı",
+              "Gizli erişim sağlayan zararlı yazılım",
+              "Ağ monitörü",
+              "Şifre yöneticisi",
+            ],
+            correct: 2,
+          },
+          {
+            question: "Diffie-Hellman algoritmasının temel amacı nedir?",
+            options: [
+              "Veri sıkıştırmak",
+              "Hash üretmek",
+              "Anahtar paylaşımı yapmak",
+              "Ağ adresini gizlemek",
+              "Yedek almak",
+            ],
+            correct: 2,
+          },
+          {
+            question:
+              "Bir ağda “VLAN” (Virtual LAN) kullanımının temel avantajı nedir?",
+            options: [
+              "Donanım gereksinimini artırmak",
+              "Trafiği karıştırmak",
+              "Ağ segmentasyonu ve güvenlik",
+              "Firewall erişimini engellemek",
+              "İnterneti hızlandırmak",
+            ],
+            correct: 2,
+          },
+          {
+            question:
+              "Bir “Next-Generation Firewall” (NGFW) geleneksel bir firewall’dan hangi özellikle ayrılır?",
+            options: [
+              "MAC adresi kontrolü",
+              "Yalnızca port filtreleme yapması",
+              "Uygulama seviyesinde derin paket incelemesi yapması",
+              "ICMP engellemesi",
+              "DNS kaydı kontrolü",
+            ],
+            correct: 2,
+          },
+          {
+            question:
+              "Bir Active Directory ortamında “Global Catalog” ne için kullanılır?",
+            options: [
+              "DNS kayıtlarını saklamak",
+              "Kullanıcıların parolasını değiştirmek",
+              "Ormandaki tüm nesnelere hızlı erişim sağlamak",
+              "Ağ erişim loglarını tutmak",
+              "Port filtrelemek",
+            ],
+            correct: 2,
+          },
+          {
+            question:
+              "Nmap ile bir hedef sistemdeki belirli bir portun açık olup olmadığını kontrol etmek için hangi komut kullanılır?",
+            options: [
+              "nmap -p 80 <hedef>",
+              "nmap -O <hedef>",
+              "nmap -T5 <hedef>",
+              "nmap -A <hedef>",
+              "nmap -sn <hedef>",
+            ],
+            correct: 0,
+          },
+          {
+            question: "DNS (Domain Name System) servisi hangi portta çalışır?",
+            options: ["22", "443", "80", "53", "110"],
+            correct: 3,
+          },
+          {
+            question: "Bir “Botnet” nedir?",
+            options: [
+              "Web tarayıcı eklentisi",
+              "Firewall güncellemesi",
+              "Saldırganın kontrolündeki çok sayıda zararlı yazılım bulaşmış sistem ağı",
+              "Antivirüs yazılımı",
+              "Şifreleme protokolü",
+            ],
+            correct: 2,
+          },
+          {
+            question: "Bir “Salt” ne için kullanılır?",
+            options: [
+              "Veri sıkıştırma",
+              "Şifre çözme",
+              "Şifrelerin hash'lerini çeşitlendirmek için rastgele veri",
+              "Ağ gecikmesini ölçme",
+              "Veritabanı sorgusu",
+            ],
+            correct: 2,
+          },
+          {
+            question:
+              "Bir ağda “IDS” (Intrusion Detection System) ile “IPS” (Intrusion Prevention System) arasındaki fark nedir?",
+            options: [
+              "IDS veri gönderir, IPS analiz eder",
+              "IDS aktif koruma sağlar, IPS sadece gözlemler",
+              "IDS saldırıyı tespit eder, IPS engeller",
+              "İkisi aynı sistemdir",
+              "IPS sadece log tutar",
+            ],
+            correct: 2,
+          },
+          {
+            question:
+              "Bir firewall’da “Application Layer Filtering” ne anlama gelir?",
+            options: [
+              "MAC filtreleme",
+              "IP adresi kontrolü",
+              "Uygulamaya özel trafiği analiz etme ve filtreleme",
+              "Yalnızca HTTP filtreleme",
+              "Yönlendirme tablosu oluşturma",
+            ],
+            correct: 2,
+          },
+          {
+            question:
+              "Bir Active Directory ortamında “FSMO” rolleri neyi ifade eder?",
+            options: [
+              "Güvenlik duvarı profilleri",
+              "Zaman senkronizasyonu",
+              "Kritik görevlerin belirli domain controller'lara atanması",
+              "Veritabanı yedekleme",
+              "DNS güncellemesi",
+            ],
+            correct: 2,
+          },
+          {
+            question:
+              "Nmap ile bir taramanın hızını artırmak için hangi parametre kullanılır?",
+            options: ["-sT", "-O", "-T5", "-sU", "-sN"],
+            correct: 2,
+          },
+          {
+            question:
+              "IMAP (Internet Message Access Protocol) servisi hangi portta çalışır?",
+            options: ["80", "25", "443", "21", "143"],
+            correct: 4,
+          },
+          {
+            question: "Bir “Ransomware” nedir?",
+            options: [
+              "E-postaları yedekleyen yazılım",
+              "Sistem kaynaklarını izleyen araç",
+              "Verileri şifreleyip fidye talep eden zararlı yazılım",
+              "Firewall yapılandırma aracı",
+              "Antivirüs güncellemesi",
+            ],
+            correct: 2,
+          },
+          {
+            question:
+              "Bir ağda “Packet Sniffing” (Paket Koklama) saldırısını tespit etmek için hangi yöntem en etkilidir?",
+            options: [
+              "ARP spoofing",
+              "Firewall kullanmak",
+              "Kablo değiştirmek",
+              "Port yansıtma tespiti",
+              "Şifreli protokoller ve IDS/IPS sistemleri",
+            ],
+            correct: 4,
+          },
+        ],
+      ];
       let currentModel = questionsModel1;
       let currentQuestion = 0;
       let score = 0;
@@ -1034,6 +1516,7 @@
         isRetrying = false;
 
         if (modelSelect.value === "model1") currentModel = questionsModel1;
+        if (modelSelect.value === "model2") currentModel = questionsModel2;
 
         displayQuestion();
         updateScore();
